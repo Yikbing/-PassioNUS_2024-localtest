@@ -1,0 +1,138 @@
+.signup_container {
+	width: 100%;
+	min-height: 100vh;
+	background-image: url('../../images/login.jpg');
+	/* Updated path */
+	background-size: cover;
+	background-position: center;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	padding: 20px;
+}
+
+.signup_form_container {
+	width: 900px;
+	display: flex;
+	border-radius: 15px;
+	overflow: hidden;
+	box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+	background-color: rgba(255, 255, 255, 0.85);
+	/* Adding a semi-transparent white background */
+}
+
+.left {
+	flex: 1;
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	justify-content: center;
+	background-color: #1a73e8;
+	padding: 40px;
+	border-top-left-radius: 15px;
+	border-bottom-left-radius: 15px;
+}
+
+.left h1 {
+	margin: 0;
+	color: white;
+	font-size: 32px;
+}
+
+.right {
+	flex: 2;
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	justify-content: center;
+	padding: 40px;
+}
+
+.form_container {
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	width: 100%;
+}
+
+.form_container h1 {
+	font-size: 32px;
+	margin-bottom: 20px;
+	color: #333;
+}
+
+.input {
+	outline: none;
+	border: 1px solid #ddd;
+	width: 100%;
+	padding: 15px;
+	border-radius: 5px;
+	background-color: #fafafa;
+	margin: 10px 0;
+	font-size: 16px;
+}
+
+.email_hint {
+	width: 100%;
+	padding: 5px 0;
+	margin-bottom: 10px;
+	margin-left: 20px;
+	font-size: 14px;
+	color: red;
+	/* Updated to red */
+	text-align: left;
+}
+
+.error_msg,
+.success_msg {
+	width: 100%;
+	padding: 10px;
+	margin: 10px 0;
+	font-size: 14px;
+	border-radius: 5px;
+	text-align: center;
+}
+
+.error_msg {
+	background-color: #f8d7da;
+	color: #721c24;
+	border: 1px solid #f5c6cb;
+}
+
+.success_msg {
+	background-color: #d4edda;
+	color: #155724;
+	border: 1px solid #c3e6cb;
+}
+
+.white_btn,
+.blue_btn {
+	border: none;
+	outline: none;
+	padding: 12px 20px;
+	border-radius: 30px;
+	font-weight: bold;
+	font-size: 16px;
+	cursor: pointer;
+	transition: background-color 0.3s ease;
+}
+
+.blue_btn {
+	background-color: #1a73e8;
+	color: white;
+	margin: 20px 0;
+}
+
+.blue_btn:hover {
+	background-color: #155ab6;
+}
+
+.white_btn {
+	background-color: white;
+	color: #1a73e8;
+	margin-top: 20px;
+}
+
+.white_btn:hover {
+	background-color: #f1f1f1;
+}

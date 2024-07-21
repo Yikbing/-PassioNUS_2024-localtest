@@ -1,0 +1,25 @@
+.matchOptionsContainer {
+    padding: 20px;
+    text-align: center;
+}
+
+.matchOptionsContainer h2 {
+    margin-bottom: 20px;
+}
+
+.matchButton {
+    display: block;
+    width: 200px;
+    margin: 10px auto;
+    padding: 10px;
+    background-color: #007bff;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 16px;
+}
+
+.matchButton:hover {
+    background-color: #0056b3;
+}

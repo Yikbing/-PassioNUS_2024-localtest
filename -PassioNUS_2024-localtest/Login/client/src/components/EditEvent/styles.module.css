@@ -1,0 +1,112 @@
+.pageContainer {
+    max-width: 800px;
+    margin: 0 auto;
+    padding: 20px;
+    font-family: Arial, sans-serif;
+}
+
+.container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+}
+
+.container input,
+.fileInput {
+    margin-bottom: 10px;
+    width: 80%;
+    max-width: 800px;
+    padding: 10px;
+    box-sizing: border-box;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+}
+
+.quillContainer {
+    margin-bottom: 10px;
+    width: 80%;
+    max-width: 800px;
+    box-sizing: border-box;
+}
+
+.quill {
+    height: 550px;
+    /* Increased height */
+    overflow-y: auto;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    padding: 10px;
+    box-sizing: border-box;
+}
+
+.ql-container {
+    height: 350px;
+    /* Increased height */
+    overflow-y: auto;
+    border: none;
+}
+
+.ql-editor {
+    padding: 10px;
+    box-sizing: border-box;
+    min-height: 150px;
+    white-space: pre-wrap;
+}
+
+.createButton,
+.cancelButton {
+    margin-top: 20px;
+    padding: 10px 20px;
+    width: 90%;
+    max-width: 600px;
+    background-color: black;
+    color: #fff;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 16px;
+    text-align: center;
+    margin: 10px auto;
+    /* Add margin for spacing between buttons */
+}
+
+.createButton:hover,
+.cancelButton:hover {
+    background-color: grey;
+}
+
+.error {
+    color: red;
+    margin-top: 10px;
+}
+
+.success {
+    color: green;
+    margin-top: 10px;
+}
+
+@media (max-width: 600px) {
+
+    .container input,
+    .fileInput,
+    .quillContainer,
+    .createButton,
+    .cancelButton {
+        width: 100%;
+    }
+
+    .quill {
+        height: 250px;
+    }
+
+    .ql-container {
+        height: 200px;
+    }
+
+    .createButton,
+    .cancelButton {
+        width: 100%;
+    }
+}

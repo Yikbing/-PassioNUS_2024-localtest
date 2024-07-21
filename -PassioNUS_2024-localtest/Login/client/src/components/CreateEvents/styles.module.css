@@ -1,0 +1,107 @@
+.pageContainer {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    height: 91vh;
+    position: relative;
+}
+
+/* Container for the back button */
+.backButtonContainer {
+    position: absolute;
+    top: 30px;
+    /* Adjust this value to move the button downwards */
+    left: 10px;
+}
+
+.backButton {
+    padding: 10px 20px;
+    background-color: black;
+    color: #fff;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 16px;
+    text-align: center;
+}
+
+.backButton:hover {
+    background-color: grey;
+}
+
+.container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+}
+
+.container input,
+.fileInput {
+    margin-bottom: 10px;
+    width: 80%;
+    max-width: 800px;
+    padding: 10px;
+    box-sizing: border-box;
+    border: 1px solid;
+}
+
+.quillContainer {
+    margin-bottom: 10px;
+    width: 80%;
+    max-width: 800px;
+    box-sizing: border-box;
+}
+
+.quill {
+    height: 600px;
+    overflow-y: auto;
+    border: 1px solid;
+    border-radius: 5px;
+    padding: 10px;
+    box-sizing: border-box;
+}
+
+.ql-container {
+    height: 400px;
+    overflow-y: auto;
+    border: none;
+}
+
+.ql-editor {
+    padding: 10px;
+    box-sizing: border-box;
+    min-height: 130px;
+    white-space: pre-wrap;
+}
+
+.createButton {
+    margin-top: 20px;
+    padding: 10px 20px;
+    width: 90%;
+    max-width: 600px;
+    background-color: black;
+    color: #fff;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 16px;
+    text-align: center;
+    margin: 0 auto;
+}
+
+.createButton:hover {
+    background-color: grey;
+}
+
+.error {
+    color: red;
+    margin-top: 10px;
+}
+
+.success {
+    color: green;
+    margin-top: 10px;
+}
