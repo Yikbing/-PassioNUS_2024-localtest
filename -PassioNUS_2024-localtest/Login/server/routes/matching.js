@@ -6,7 +6,18 @@ const Interest = require('../models/interests'); // Import your Interest model
 // Route to handle fetching users with optional filtering
 router.post('/', async (req, res) => {
   console.log('Received POST request at /api/matching');
-  const { gender, userId } = req.body; // Use body parameters
+  console.log('Request body:', req.body); // Log request body
+
+  // Access userId and gender from the request body
+  const { userId, gender } = req.body; // Get userId and gender from request body
+
+  if (!userId) {
+    return res.status(401).json({ error: 'Unauthorized: No user ID provided' });
+  }
+
+  if (!gender) {
+    return res.status(400).json({ error: 'Bad Request: No gender provided' });
+  }
 
   try {
     // Fetch users based on gender filter
@@ -25,6 +36,9 @@ router.post('/', async (req, res) => {
 
     // Fetch the matching user's year of study
     const matchingUser = await User.findById(userId);
+    if (!matchingUser) {
+      return res.status(404).json({ error: 'Matching user not found' });
+    }
     const matchingUserYear = matchingUser.year;
 
     // Calculate points based on overlapping interests and add year of study gap

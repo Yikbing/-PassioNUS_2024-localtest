@@ -2,23 +2,32 @@ import React, { useState } from 'react';
 import axios from 'axios';
 import styles from "./styles.module.css";
 
-const Matching = ({ currentUserId }) => {
+const Matching = () => {
   const [gender, setGender] = useState('no-preference');
   const [match, setMatch] = useState(null);
 
   const handleSubmit = async (event) => {
     event.preventDefault();
 
-    console.log('Submitting form with gender:', gender, 'and userId:', currentUserId);
+    // Retrieve userId from localStorage
+    const userId = localStorage.getItem('userId');
 
-    const url = '/api/matching';
+    // Check if userId exists
+    if (!userId) {
+      console.error('No userId found in localStorage');
+      return;
+    }
+
+    console.log('Submitting form with gender:', gender);
+
+    const url = 'http://localhost:8080/api/matching';
     const data = {
       gender,
-      userId: currentUserId
+      userId // Include userId in the data
     };
 
     try {
-      const response = await axios.post(url, data);
+      const response = await axios.post(url, data, { withCredentials: true }); // Include credentials
       setMatch(response.data);
       console.log('Best match user:', response.data);
     } catch (error) {

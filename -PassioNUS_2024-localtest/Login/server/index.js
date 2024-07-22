@@ -4,6 +4,8 @@ const http = require("http");
 const cors = require("cors");
 const path = require("path");
 const socketIo = require("socket.io");
+const session = require("express-session");
+const MongoStore = require("connect-mongo");
 const connection = require("./database");
 const userRoutes = require("./routes/students");
 const authRoutes = require("./routes/auth");
@@ -43,8 +45,25 @@ app.use(express.static("public"));
 app.use(express.urlencoded({ extended: false }));
 app.set("view engine", "ejs");
 
+// Configure sessions
+app.use(session({
+  secret: process.env.SESSION_SECRET || 'your-secret-key', // Use a strong secret in production
+  resave: false,
+  saveUninitialized: false,
+  store: MongoStore.create({
+    mongoUrl: process.env.DB, // Your MongoDB connection string
+    collectionName: 'sessions'
+  }),
+  cookie: { secure: false } // Set to true if using HTTPS
+}));
+
 // Serve static files from the uploads folder
 app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
+
+// Test Route
+app.get('/test', (req, res) => {
+  res.send('Server is working');
+});
 
 // Routes
 app.use("/api/students", userRoutes);
