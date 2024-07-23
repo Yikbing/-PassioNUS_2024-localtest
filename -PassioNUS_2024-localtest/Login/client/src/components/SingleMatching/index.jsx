@@ -1,10 +1,12 @@
 import React, { useState } from 'react';
 import axios from 'axios';
-import styles from "./styles.module.css";
+import { useNavigate } from 'react-router-dom'; // Import useNavigate for redirection
+import styles from "./styles.module.css"
 
 const Matching = () => {
   const [gender, setGender] = useState('no-preference');
   const [match, setMatch] = useState(null);
+  const navigate = useNavigate(); // Initialize useNavigate hook
 
   const handleSubmit = async (event) => {
     event.preventDefault();
@@ -36,6 +38,25 @@ const Matching = () => {
     }
   };
 
+  const handleChatRedirect = () => {
+    if (match) {
+      // Redirect to chat page with matched user's name in the search query
+      navigate(`/chat?search=${encodeURIComponent(match.name)}`);
+    }
+  };
+
+  const handleCopyEmail = () => {
+    if (match) {
+      navigator.clipboard.writeText(match.email)
+        .then(() => {
+          alert('Email copied to clipboard!');
+        })
+        .catch(err => {
+          console.error('Failed to copy email:', err);
+        });
+    }
+  };
+
   return (
     <div>
       <form onSubmit={handleSubmit}>
@@ -52,7 +73,15 @@ const Matching = () => {
       {match && (
         <div>
           <h2>Best Match:</h2>
-          <p>{JSON.stringify(match)}</p>
+          <p>Name: {match.name}</p>
+          <p>Faculty: {match.faculty}</p>
+          <p>Year: {match.year}</p>
+          <p>Interests: {match.interests.join(', ')}</p>
+          <p>
+            Email: <a href={`mailto:${match.email}`}>{match.email}</a> {/* Clickable email link */}
+          </p>
+          <button onClick={handleCopyEmail}>Copy Email</button> {/* Copy email button */}
+          <button onClick={handleChatRedirect}>Click here to chat</button> {/* Redirect to chat */}
         </div>
       )}
     </div>

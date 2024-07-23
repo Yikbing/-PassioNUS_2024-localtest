@@ -47,16 +47,7 @@ router.post("/", async (req, res) => {
         const token = user.generateAuthToken();
         console.log("User logged in successfully:", user.email);
 
-        // Save the userId in the session
-        req.session.userId = user._id;
-
         // Save the session and respond
-        req.session.save(err => {
-            if (err) {
-                console.error("Error saving session:", err);
-                return res.status(500).send({ message: "Internal Server Error" });
-            }
-            console.log(`Session saved: userId=${req.session.userId}`); // Log message to confirm userId is saved
             res.status(200).send({
                 data: {
                     token,
@@ -66,7 +57,7 @@ router.post("/", async (req, res) => {
                 },
                 message: "Logged in successfully"
             });
-        });
+        
     } catch (error) {
         console.error("Internal Server Error:", error); // Log the full error
         res.status(500).send({ message: "Internal Server Error" });

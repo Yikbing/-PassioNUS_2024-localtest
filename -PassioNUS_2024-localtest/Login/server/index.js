@@ -1,11 +1,8 @@
 require("dotenv").config();
 const express = require("express");
-const http = require("http");
+const app = express();
 const cors = require("cors");
 const path = require("path");
-const socketIo = require("socket.io");
-const session = require("express-session");
-const MongoStore = require("connect-mongo");
 const connection = require("./database");
 const userRoutes = require("./routes/students");
 const authRoutes = require("./routes/auth");
@@ -21,49 +18,20 @@ const messageRoutes = require("./routes/messageRoutes");
 // Database connection
 connection();
 
-// Create Express app
-const app = express();
-const server = http.createServer(app); // Create HTTP server
-const io = socketIo(server, {
-  cors: {
-    origin: "http://localhost:5173", // Replace with your client URL
-    methods: ["GET", "POST"],
-    allowedHeaders: ["Content-Type"],
-    credentials: true
-  }
-}); // Integrate Socket.IO with HTTP server
-
 // Middlewares
 app.use(express.json());
 app.use(cors({
-  origin: "http://localhost:5173", // Replace with your client URL
-  methods: ["GET", "POST"],
-  allowedHeaders: ["Content-Type"],
-  credentials: true
+    origin: "http://localhost:5173", 
+    methods: ["GET", "POST", "PUT", "DELETE"],
+    allowedHeaders: ["Content-Type", "Authorization"],
+    credentials: true
 }));
 app.use(express.static("public"));
 app.use(express.urlencoded({ extended: false }));
 app.set("view engine", "ejs");
 
-// Configure sessions
-app.use(session({
-  secret: process.env.SESSION_SECRET || 'your-secret-key', // Use a strong secret in production
-  resave: false,
-  saveUninitialized: false,
-  store: MongoStore.create({
-    mongoUrl: process.env.DB, // Your MongoDB connection string
-    collectionName: 'sessions'
-  }),
-  cookie: { secure: false } // Set to true if using HTTPS
-}));
-
 // Serve static files from the uploads folder
 app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
-
-// Test Route
-app.get('/test', (req, res) => {
-  res.send('Server is working');
-});
 
 // Routes
 app.use("/api/students", userRoutes);
@@ -77,26 +45,50 @@ app.use("/api/matching", matchingRoutes);
 app.use("/api/chat", chatRoutes);
 app.use("/api/message", messageRoutes);
 
-// Socket.IO integration
-io.on('connection', (socket) => {
-    console.log('a user connected');
+const port = process.env.PORT || 8080;
+const server = app.listen(port, () => console.log(`Listening on port ${port}...`));
 
-    // Handle incoming message event
-    socket.on('sendMessage', (message) => {
-        console.log('Received message:', message);
-        
-        // Broadcast the message to all connected clients
-        io.emit('receiveMessage', message);
 
-        // Optionally, save the message to a database or perform other actions
-    });
-
-    // Handle other events as needed
-    socket.on('disconnect', () => {
-        console.log('user disconnected');
-    });
+const io = require('socket.io')(server, {
+    pingTimeout: 60000,
+    cors: {
+        origin: "http://localhost:5173",
+        methods: ["GET", "POST", "PUT", "DELETE"],
+        allowedHeaders: ["Content-Type", "Authorization"],
+        credentials: true
+    },
 });
 
-// Start the server
-const port = process.env.PORT || 8080;
-server.listen(port, () => console.log(`Listening on port ${port}...`));
+io.on("connection", (socket) => {
+    console.log('connected to socket.io');
+
+    socket.on("setup", (user) => {
+        socket.join(user._id);  // Ensure you are joining the room with the user ID
+        socket.emit("connected");
+    });
+
+    socket.on("join chat", (room) => {
+        socket.join(room);
+        console.log("User Joined Room: " + room);
+    });
+
+    /*socket.on("typing", (room) => socket.in(room).emit("typing"));
+    socket.on("stop typing", (room) => socket.in(room).emit("stop typing"));*/
+
+    socket.on("new message", (newMessageReceived) => {
+        var chat = newMessageReceived.chat;
+
+        if (!chat.users) return console.log('chat.users not defined');
+
+        chat.users.forEach(user => {
+            if (user._id == newMessageReceived.sender._id) return;
+
+            socket.in(user._id).emit("message received", newMessageReceived);
+        });
+    });
+
+    socket.off("setup", () => {
+        console.log("User Disconnected");
+        socket.leave(user._id);  // Ensure you leave the room with the user ID
+    });
+});
