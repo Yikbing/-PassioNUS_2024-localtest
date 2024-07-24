@@ -13,7 +13,7 @@ import ProfilePage from "./components/ProfilePage";
 import ChangePassword from "./components/ChangePassword";
 import SingleMatch from "./components/SingleMatching";
 import MatchOptions from "./components/MatchOptions";
-import GroupMatch from "./components/GroupMatching";
+import GroupMatch from "./components/studyMatch";
 import SingleEventPage from "./components/SingleEventPage";
 import EditEvent from "./components/EditEvent";
 import ChatPage from "./components/Chat";
