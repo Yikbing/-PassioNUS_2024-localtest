@@ -15,6 +15,7 @@ const matchingRoutes = require("./routes/matching");
 const chatRoutes = require("./routes/chatRoutes");
 const messageRoutes = require("./routes/messageRoutes");
 const studyRoutes = require("./routes/studybuddy");
+const moduleRoutes = require("./routes/moduleLogging");
 
 // Database connection
 connection();
@@ -46,6 +47,7 @@ app.use("/api/matching", matchingRoutes);
 app.use("/api/chat", chatRoutes);
 app.use("/api/message", messageRoutes);
 app.use("/api/studybuddy",studyRoutes);
+app.use("/api/moduleform",moduleRoutes);
 
 const port = process.env.PORT || 8080;
 const server = app.listen(port, () => console.log(`Listening on port ${port}...`));

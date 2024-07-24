@@ -17,6 +17,7 @@ import GroupMatch from "./components/studyMatch";
 import SingleEventPage from "./components/SingleEventPage";
 import EditEvent from "./components/EditEvent";
 import ChatPage from "./components/Chat";
+import ModulesForm from "./components/ModuleForm";
 
 function App() {
   const user = localStorage.getItem("token");
@@ -48,6 +49,7 @@ function App() {
             <Route path="profile" element={<ProfilePage />} />
             <Route path="chat" element={<ChatPage />} />
             <Route path="settings" element={<ChangePassword />} />
+            <Route path="module_form" element={<ModulesForm />} />
           </Route>
         </>
       )}

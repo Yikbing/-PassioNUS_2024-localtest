@@ -1,11 +1,8 @@
+//working studybuddy.js
+
 const express = require('express');
 const mongoose = require('mongoose');
-const Module = require('../models/modules'); // Adjust the path if necessary
-const Config = require('../models/config'); // Adjust the path if necessary
 const router = express.Router();
-const Chat = require('../models/chatModel');
-const { studentModel: Student } = require('../models/Student');
-const { ObjectId } = require('mongodb');
 
 // Function to remove duplicate modules by name
 function removeDuplicateModules(modules) {
@@ -25,6 +22,7 @@ function removeDuplicateModules(modules) {
 // Route to handle module data submission
 router.post('/', async (req, res) => {
   let { userId, modules } = req.body;
+  console.log('Received data from client:', { userId, modules });
 
   // Remove duplicates from the modules array
   modules = removeDuplicateModules(modules);
@@ -36,32 +34,6 @@ router.post('/', async (req, res) => {
       { $set: { modules } }, // Update the modules field
       { upsert: true, new: true } // Create a new document if none exists, and return the updated document
     );
-
-    // Log the updatedModuleEntry to see its elements and format
-    console.log('Updated Module Entry:', updatedModuleEntry);
-
-    // Convert userId to ObjectId
-    const userObjectId = new mongoose.Types.ObjectId(userId);
-    //const userObjectId = new ObjectId(userId);
-    //var userObjectId = new mongoose.Types.ObjectId(userId);
-
-    console.log('Converted userId to ObjectId:', userObjectId);
-
-    let users;
-    users = await Config.find({ userId: { $ne: userObjectId } });
-
-    // Fetch existing chats for the current user
-    const existingChats = await Chat.find({ users: { $elemMatch: { $eq: userObjectId } } }).select('users');
-    const existingChatUserIds = existingChats.flatMap(chat => chat.users.filter(id => !id.equals(userObjectId)).map(id => id.toString()));
-
-    console.log('Existing chat user IDs:', existingChatUserIds);
-
-    // Exclude users who already have a chat with the current user
-    users = users.filter(user => !existingChatUserIds.includes(user.userId.toString()));
-
-    if (users.length === 0) {
-      return res.json({ message: 'No matches found' });
-    }
 
     // Find users with similar modules
     const allModules = await Module.find({}).exec();
@@ -87,6 +59,7 @@ router.post('/', async (req, res) => {
       const matchedUser = await Config.findOne({ userId: bestMatch.userId }).exec();
 
       if (matchedUser) {
+        console.log(`Matching userId: ${userId}`);
         console.log(`Best match userId: ${bestMatch.userId}`);
         console.log(`Highest Score: ${highestScore}`);
         console.log(`Common modules: ${commonModules.join(', ')}`);

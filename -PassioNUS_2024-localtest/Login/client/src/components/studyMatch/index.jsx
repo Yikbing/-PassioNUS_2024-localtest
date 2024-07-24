@@ -2,17 +2,13 @@ import React, { useState } from 'react';
 import axios from 'axios';
 import { useNavigate } from "react-router-dom";
 import { useToast } from "@chakra-ui/react";
-import { ChatState } from "../../Context/ChatProvider";
-import { accessChat } from "../ChatBox"; // Import the accessChat function
 
 const ModulesForm = () => {
   const [modules, setModules] = useState([{ name: '' }]);
-  const [userId, setUserId] = useState('');
   const [match, setMatch] = useState(null); // State to store matched user details
   const [noMatchMessage, setNoMatchMessage] = useState("");
   const navigate = useNavigate();
   const toast = useToast();
-  const { chats, setChats, setSelectedChat } = ChatState();
 
   const handleModuleChange = (index, event) => {
     const values = [...modules];
@@ -34,13 +30,10 @@ const ModulesForm = () => {
     event.preventDefault();
     const storedUserId = localStorage.getItem('userId');
     console.log('Retrieved userId from localStorage:', storedUserId); // Log the retrieved userId
-    if (storedUserId) {
-      setUserId(storedUserId);
-    }
 
     const url = 'http://localhost:8080/api/studybuddy';
     const data = {
-      userId,
+      userId: storedUserId,
       modules // Include userId in the data
     };
 
@@ -53,14 +46,6 @@ const ModulesForm = () => {
       console.error('Error fetching users:', error);
       setMatch(null); // Clear match state on error
       setNoMatchMessage("No match found"); // Set no match message
-    }
-  };
-
-  const handleChatRedirect = async () => {
-    if (match && match.userId) {
-      console.log("Redirecting to chat with user:", match.userId);
-      await accessChat(match.userId, chats, setChats, setSelectedChat, toast);
-      navigate(`/chat?search=${encodeURIComponent(match.match.name)}`);
     }
   };
 
@@ -123,12 +108,6 @@ const ModulesForm = () => {
             className="button"
           >
             Copy Matched User Email
-          </button>
-          <button
-            onClick={handleChatRedirect}
-            className="button"
-          >
-            Go to Chat!
           </button>
         </div>
       )}
